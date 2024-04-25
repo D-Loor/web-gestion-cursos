@@ -1,0 +1,120 @@
+<app-menu></app-menu>
+
+<div class="container">
+    <div class="mt-4 card">
+        <div class="m-4">
+
+            <h5 class="card-title">Modalidades</h5>
+            <div class="d-flex justify-content-end">
+                <input class="form-control me-2 w-25" type="text" placeholder="Buscar" aria-label="Buscar" [(ngModel)]="buscar"
+                 (keyup)="filtrar()">
+
+                <button type="button" class="btn btn-success" data-bs-target="#modalToggle" data-bs-toggle="modal"
+                    (click)="limpiar()">
+                    <span class="material-icons d-flex align-items-center">add</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table text-center">
+                        <thead>
+                            <tr class=" justify-content-center">
+                                <th scope="col">Modalidad</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listaModalidadesFiltrada">
+                                <td>{{item.modalidad}}</td>
+                                <td>
+                                    <span *ngIf="item.estado === 0" class="badge text-bg-secondary">Inactivo</span>
+                                    <span *ngIf="item.estado === 1" class="badge text-bg-success">Activo</span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm mx-1" (click)="cargarData(item);"
+                                        data-bs-target="#modalToggle" data-bs-toggle="modal">
+                                        <span class="material-icons d-flex align-items-center">create</span>
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-sm">
+                                        <span class="material-icons d-flex align-items-center"
+                                            data-bs-target="#modalToggleEliminar" data-bs-toggle="modal"
+                                            (click)="cargarData(item)">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+                        <ul class="pagination">
+                            <li class="page-item" (click)="currentPage != 1? goToPage(currentPage - 1): ''"
+                                [class.disabled]="currentPage === 1">
+                                <a class="page-link">Anterior</a>
+                            </li>
+                            <li class="page-item" *ngFor="let page of getPageArray()" (click)="goToPage(page)"
+                                [class.active]="page === currentPage">
+                                <a class="page-link">{{ page }}</a>
+                            </li>
+                            <li class="page-item"
+                                (click)="currentPage != getTotalPages()? goToPage(currentPage + 1): ''"
+                                [class.disabled]="currentPage === getTotalPages()">
+                                <a class="page-link">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="modalToggle" aria-hidden="true" aria-labelledby="modalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalToggleLabel">{{accion}} Modalidad</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="dataForm">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Modalidad</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                            formControlName="modalidad" placeholder="Ingrese Modalidad">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput2" class="form-label">Estado</label>
+                        <select class="form-select" aria-label="Default select example" formControlName="estado">
+                            <option [value]="1">Activo</option>
+                            <option [value]="0">Inactivo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-dark" data-bs-target="#modalToggle" data-bs-toggle="modal">Cancelar</button>
+                <button class="btn btn-success" data-bs-target="#modalToggle" data-bs-toggle="modal" (click)="accionar()">{{accion}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalToggleEliminar" aria-hidden="true" aria-labelledby="modalToggleEliminarLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalToggleEliminarLabel">Eliminar Modalidad</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar la modalidad: <strong>{{dataForm.get('modalidad')?.value}}</strong> ?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-dark" data-bs-target="#modalToggleEliminar" data-bs-toggle="modal">Cancelar</button>
+                <button class="btn btn-success" data-bs-target="#modalToggleEliminar" data-bs-toggle="modal"
+                    (click)="eliminar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>

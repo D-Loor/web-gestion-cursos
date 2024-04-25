@@ -1,0 +1,131 @@
+<app-menu></app-menu>
+
+<div class="container">
+    <div class="mt-4 card">
+        <div class="m-4">
+            <div class="row">
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <span class="material-icons d-flex align-items-center"
+                                        style="font-size: 60px; color: rgb(179, 166, 49);">fact_check</span>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="float-end">
+                                        <p style="font-size: 18px; margin-bottom: 0px; color: #757575;">Total Cursos</p>
+                                        <h2 class="d-flex justify-content-end" style="margin-bottom: 0px;">
+                                            {{totalCursos}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="d-flex align-content-end" href="/cursos" class="card-link"
+                                style="text-decoration: none; color: #757575;">
+                                Ver detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <span class="material-icons d-flex align-items-center"
+                                        style="font-size: 60px; color: rgb(179, 166, 49);">group</span>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="float-end">
+                                        <p style="font-size: 18px; margin-bottom: 0px; color: #757575;">Total
+                                            Estudiantes</p>
+                                        <h2 class="d-flex justify-content-end" style="margin-bottom: 0px;">
+                                            {{totalEstudiantes}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="d-flex align-content-end" href="/estudiantes" class="card-link"
+                                style="text-decoration: none; color: #757575;">
+                                Ver detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <span class="material-icons d-flex align-items-center"
+                                        style="font-size: 60px; color: rgb(76 179 49);">lan</span>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="float-end">
+                                        <p style="font-size: 18px; margin-bottom: 0px; color: #757575;">Top Cursos</p>
+                                        <h2 class="d-flex justify-content-end" style="margin-bottom: 0px;">{{nTop}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <p class="d-inline-flex gap-1" style="margin-bottom: 0px;">
+                                <a data-bs-toggle="collapse" href="#collapseCursos"
+                                     aria-expanded="false" aria-controls="collapseCursos" style="text-decoration: none; color: #757575;">
+                                    Ver detalles
+                                </a>
+                            </p>
+                            <div class="collapse mt-2" id="collapseCursos">
+                                <div class="card card-body">
+                                    <ul style="margin-bottom: 0px;">
+                                        <li *ngFor="let item of listaCursos"> {{item.nombre}} ({{item.inscritos}})</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <span class="material-icons d-flex align-items-center"
+                                        style="font-size: 60px; color: rgb(76 179 49);">groups</span>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="float-end">
+                                        <p style="font-size: 18px; margin-bottom: 0px; color: #757575;">Top Estudiantes
+                                        </p>
+                                        <h2 class="d-flex justify-content-end" style="margin-bottom: 0px;">{{nTop}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <p class="d-inline-flex gap-1" style="margin-bottom: 0px;">
+                                <a data-bs-toggle="collapse" href="#collapseEstudiantes"
+                                     aria-expanded="false" aria-controls="collapseEstudiantes" style="text-decoration: none; color: #757575;">
+                                    Ver detalles
+                                </a>
+                            </p>
+                            <div class="collapse mt-2" id="collapseEstudiantes">
+                                <div class="card card-body">
+                                    <ul style="margin-bottom: 0px;">
+                                        <li *ngFor="let item of listaEstudiantes"> 
+                                        {{item.usuario.nombre + ' ' + item.usuario.apellido + ' (' + item.cursos_estudiante_count + ')' }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

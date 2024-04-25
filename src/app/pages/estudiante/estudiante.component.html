@@ -1,0 +1,185 @@
+<app-menu></app-menu>
+
+<div class="container">
+    <div class="mt-4 card">
+        <div class="m-4">
+
+            <h5 class="card-title">Estudiantes</h5>
+            <div class="d-flex justify-content-end">
+                <input class="form-control me-2 w-25" type="text" placeholder="Buscar" aria-label="Buscar" [(ngModel)]="buscar"
+                 (keyup)="filtrar()">
+
+                <button type="button" class="btn btn-success" data-bs-target="#modalToggle" data-bs-toggle="modal"
+                    (click)="limpiar()">
+                    <span class="material-icons d-flex align-items-center">add</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table text-center">
+                        <thead>
+                            <tr class=" justify-content-center">
+                                <th scope="col">Nombres</th>
+                                <th scope="col">Apellidos</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Cédula</th>
+                                <th scope="col">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listaEstudiantesFiltrada">
+                                <td>{{item.usuario.nombre}}</td>
+                                <td>{{item.usuario.apellido}}</td>
+                                <td>{{item.usuario.email}}</td>
+                                <td>{{item.ci}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm mx-1" (click)="presentarCursosTomados(item.id_estudiante, item.usuario);"
+                                        data-bs-target="#modalToggleCursos" data-bs-toggle="modal">
+                                        <span class="material-icons d-flex align-items-center">visibility</span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm mx-1" (click)="cargarData(item);"                                    
+                                        data-bs-target="#modalToggle" data-bs-toggle="modal">
+                                        <span class="material-icons d-flex align-items-center">create</span>
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-sm">
+                                        <span class="material-icons d-flex align-items-center"
+                                            data-bs-target="#modalToggleEliminar" data-bs-toggle="modal"
+                                            (click)="cargarData(item)">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+                        <ul class="pagination">
+                            <li class="page-item" (click)="currentPage != 1? goToPage(currentPage - 1): ''"
+                                [class.disabled]="currentPage === 1">
+                                <a class="page-link">Anterior</a>
+                            </li>
+                            <li class="page-item" *ngFor="let page of getPageArray()" (click)="goToPage(page)"
+                                [class.active]="page === currentPage">
+                                <a class="page-link">{{ page }}</a>
+                            </li>
+                            <li class="page-item"
+                                (click)="currentPage != getTotalPages()? goToPage(currentPage + 1): ''"
+                                [class.disabled]="currentPage === getTotalPages()">
+                                <a class="page-link">Siguiente</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalToggle" aria-hidden="true" aria-labelledby="modalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalToggleLabel">{{accion}} Estudiante</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="dataForm">
+                    <div formGroupName="usuario">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput1"
+                                formControlName="nombre" placeholder="Ingrese Nombre">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput2" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput2"
+                                formControlName="apellido" placeholder="Ingrese Apellido">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput3" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="exampleFormControlInput3"
+                                formControlName="email" placeholder="Ingrese Email">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput4" class="form-label">Cédula</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput4"
+                            formControlName="ci" placeholder="Ingrese Cédula">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput5" class="form-label">Edad</label>
+                        <input type="number" class="form-control" id="exampleFormControlInput5"
+                            formControlName="edad" placeholder="Ingrese Edad">
+                    </div>
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-dark" data-bs-target="#modalToggle" data-bs-toggle="modal">Cancelar</button>
+                <button class="btn btn-success" data-bs-target="#modalToggle" data-bs-toggle="modal"
+                    (click)="accionar()">{{accion}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalToggleEliminar" aria-hidden="true" aria-labelledby="modalToggleEliminarLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalToggleEliminarLabel">Eliminar Estudiante</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar el estudiante: 
+                    <strong>{{dataForm.get('usuario.nombre')?.value + ' '}}</strong> 
+                    <strong>{{dataForm.get('usuario.apellido')?.value}}</strong>?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-dark" data-bs-target="#modalToggleEliminar" data-bs-toggle="modal">Cancelar</button>
+                <button class="btn btn-success" data-bs-target="#modalToggleEliminar" data-bs-toggle="modal"
+                    (click)="eliminar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-lg" id="modalToggleCursos" aria-hidden="true" aria-labelledby="modalToggleCursosLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalToggleCursosLabel">Cursos Tomados por: <strong>{{nombreEstudiante}}</strong> </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="m-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table text-center">
+                                <thead>
+                                    <tr class=" justify-content-center">
+                                        <th scope="col">Curso</th>
+                                        <th scope="col">Modalidad</th>
+                                        <th scope="col">Fecha Inscripción</th>
+                                        <th scope="col">Fecha Finalización</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of listaCursosInscritos">
+                                        <td>{{item.curso.nombre}}</td>
+                                        <td>{{item.curso.modalidad.modalidad}}</td>
+                                        <td>{{item.fecha_inscripcion}}</td>
+                                        <td>{{item.fecha_finalizacion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-dark" data-bs-target="#modalToggleCursos" data-bs-toggle="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
